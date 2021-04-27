@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { DataContext } from "../context/store";
+import "../sass/BoardTitle.scss"
 
 const BoardTitle = ({ title, id }) => {
   const { changeTitle } = useContext(DataContext);

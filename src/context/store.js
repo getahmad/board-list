@@ -10,7 +10,7 @@ const cards = [
     title: "learning about redux",
   },
   {
-    id: "card-2",
+    id: "card-3",
     title: "learning about testing",
   },
 ];
@@ -36,20 +36,33 @@ export const DataProvider = (props) => {
   const [store, setStore] = useState(initialState);
 
   const changeTitle = (id, text) => {
-    const item = store.lists[id]
-    item.title = text
+    const item = store.lists[id];
+    item.title = text;
     const newStore = {
       ...store,
       lists: {
         ...store.lists,
-        [id]: item
+        [id]: item,
+      },
+    };
+    setStore(newStore);
+  };
+  const deleteCard = (cardId, listId) => {
+    const item = store.lists[listId]
+    const removeCard = item.card.filter(item => item.id !== cardId)
+    item.card = removeCard
+    const newStore = {
+      ...store,
+      lists: {
+        ...store.lists,
+        [listId]: item
       }
     }
     setStore(newStore)
   }
-  
+
   return (
-    <DataContext.Provider value={{ store, changeTitle }}>
+    <DataContext.Provider value={{ store, changeTitle, deleteCard }}>
       {props.children}
     </DataContext.Provider>
   );

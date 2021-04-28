@@ -3,8 +3,8 @@ import DeleteIcon from "../assets/trash.svg";
 import { DataContext } from "../context/store";
 import "../sass/Card.scss";
 
-const Card = ({ item, id }) => {
-  const {deleteCard} = useContext(DataContext);
+const Card = ({ item, id, index }) => {
+  const { deleteCard, editCard } = useContext(DataContext);
   const [text, setText] = useState(item.title);
   const [edit, setEdit] = useState(false);
 
@@ -12,19 +12,30 @@ const Card = ({ item, id }) => {
     setEdit(true);
   };
 
+  const handleChange = (e) => {
+    setText(e.target.value);
+  };
+
   const closeEdit = () => {
+    editCard(id, item.id, index, text);
     setEdit(false);
   };
 
   const cardDelete = () => {
-    deleteCard(item.id, id)
-  }
+    deleteCard(item.id, id);
+  };
 
   return (
     <div className="card-list">
       {edit ? (
         <form onsubmit={closeEdit}>
-          <input value={text} onBlur={closeEdit} type="text" autoFocus />
+          <input
+            onChange={handleChange}
+            value={text}
+            onBlur={closeEdit}
+            type="text"
+            autoFocus
+          />
         </form>
       ) : (
         <div className="card-list__text">

@@ -48,21 +48,36 @@ export const DataProvider = (props) => {
     setStore(newStore);
   };
   const deleteCard = (cardId, listId) => {
-    const item = store.lists[listId]
-    const removeCard = item.card.filter(item => item.id !== cardId)
-    item.card = removeCard
+    const item = store.lists[listId];
+    const removeCard = item.card.filter((item) => item.id !== cardId);
+    item.card = removeCard;
     const newStore = {
       ...store,
       lists: {
         ...store.lists,
-        [listId]: item
-      }
-    }
-    setStore(newStore)
-  }
+        [listId]: item,
+      },
+    };
+    setStore(newStore);
+  };
+
+  const editCard = (listId, cardId, idx, text) => {
+    const item = store.lists[listId];
+    const card = item.card.find((item) => item.id === cardId);
+    card.title = text;
+    item.card.splice(idx, 1, card);
+    const newStore = {
+      ...store,
+      lists: {
+        ...store.lists,
+        [listId]: item,
+      },
+    };
+    setStore(newStore);
+  };
 
   return (
-    <DataContext.Provider value={{ store, changeTitle, deleteCard }}>
+    <DataContext.Provider value={{ store, changeTitle, deleteCard, editCard }}>
       {props.children}
     </DataContext.Provider>
   );

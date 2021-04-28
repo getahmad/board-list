@@ -16,7 +16,7 @@ const Board = ({ data }) => {
       <div>
         {data.card.map((card, index) => (
         
-          <Card key={index} item={card} id={data.id} />
+          <Card index={index} key={index} item={card} id={data.id} />
         ))}
       </div>
       <button>add</button>

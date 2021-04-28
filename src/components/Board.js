@@ -3,6 +3,7 @@ import "../sass/Board.scss";
 import BoardTitle from "./BoardTitle";
 import Menu from "../assets/menu.svg";
 import Card from "./Card";
+import Button from "./Button";
 
 const Board = ({ data }) => {
   return (
@@ -19,7 +20,7 @@ const Board = ({ data }) => {
           <Card index={index} key={index} item={card} id={data.id} />
         ))}
       </div>
-      <button>add</button>
+      <Button id={data.id}  />
     </div>
   );
 };

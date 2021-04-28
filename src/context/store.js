@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import { v4 as uuid } from "uuid";
 
 const cards = [
   {
@@ -76,8 +77,26 @@ export const DataProvider = (props) => {
     setStore(newStore);
   };
 
+  const addCard = (listId, text) => {
+    const item = store.lists[listId];
+    const id = uuid();
+    const newCard = {
+      id: `card-${id}`,
+      title: text,
+    };
+    item.card = [...item.card, newCard];
+    const newStore = {
+      ...store,
+      listId: {
+        ...store.lists,
+        [listId]: item,
+      },
+    };
+    setStore(newStore);
+  };
+
   return (
-    <DataContext.Provider value={{ store, changeTitle, deleteCard, editCard }}>
+    <DataContext.Provider value={{ store, changeTitle, deleteCard, editCard,addCard }}>
       {props.children}
     </DataContext.Provider>
   );

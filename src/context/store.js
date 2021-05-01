@@ -1,7 +1,9 @@
-import { createContext, useState } from "react";
-import { v4 as uuid } from "uuid";
+import { createContext, useReducer, useState } from "react";
+// import { v4 as uuid } from "uuid";
+import { cardReducer } from "../reducers/cardReducer";
+import { listReducer } from "../reducers/listReducer";
 
-const cards = [
+let cards = [
   {
     id: "card-1",
     title: "learning about react",
@@ -16,7 +18,7 @@ const cards = [
   },
 ];
 
-const initialState = {
+let initialState = {
   lists: {
     "list-1": {
       id: "list-1",
@@ -36,6 +38,9 @@ export const DataContext = createContext();
 export const DataProvider = (props) => {
   const [store, setStore] = useState(initialState);
 
+  const [cards,cardDispatch]=useReducer(cardReducer,initialState)
+  const [listsKanban,listDispatch] = useReducer(listReducer,initialState);
+
   const changeTitle = (id, text) => {
     const item = store.lists[id];
     item.title = text;
@@ -48,19 +53,20 @@ export const DataProvider = (props) => {
     };
     setStore(newStore);
   };
-  const deleteCard = (cardId, listId) => {
-    const item = store.lists[listId];
-    const removeCard = item.card.filter((item) => item.id !== cardId);
-    item.card = removeCard;
-    const newStore = {
-      ...store,
-      lists: {
-        ...store.lists,
-        [listId]: item,
-      },
-    };
-    setStore(newStore);
-  };
+
+  // const deleteCard = (cardId, listId) => {
+  //   const item = store.lists[listId];
+  //   const removeCard = item.card.filter((item) => item.id !== cardId);
+  //   item.card = removeCard;
+  //   const newStore = {
+  //     ...store,
+  //     lists: {
+  //       ...store.lists,
+  //       [listId]: item,
+  //     },
+  //   };
+  //   setStore(newStore);
+  // };
 
   const editCard = (listId, cardId, idx, text) => {
     const item = store.lists[listId];
@@ -77,26 +83,62 @@ export const DataProvider = (props) => {
     setStore(newStore);
   };
 
-  const addCard = (listId, text) => {
-    const item = store.lists[listId];
-    const id = uuid();
-    const newCard = {
-      id: `card-${id}`,
-      title: text,
-    };
-    item.card = [...item.card, newCard];
-    const newStore = {
-      ...store,
-      listId: {
-        ...store.lists,
-        [listId]: item,
-      },
-    };
-    setStore(newStore);
+  // const addCard = (listId, text) => {
+  //   const item = store.lists[listId];
+  //   const id = uuid();
+  //   const newCard = {
+  //     id: `card-${id}`,
+  //     title: text,
+  //   };
+  //   item.card = [...item.card, newCard];
+  //   const newStore = {
+  //     ...store,
+  //     listId: {
+  //       ...store.lists,
+  //       [listId]: item,
+  //     },
+  //   };
+  //   setStore(newStore);
+  // };
+
+  // const addList = (text) => {
+  //   const id = `list-${uuid()}`;
+  //   const newList = {
+  //     id,
+  //     title: text,
+  //     card: [],
+  //   };
+  //   const newStore = {
+  //     listIds: [...store.listIds, id],
+  //     lists: {
+  //       ...store.lists,
+  //       [id]: newList,
+  //     },
+  //   };
+  //   setStore(newStore);
+  // };
+
+  const updateDrag = (data) => {
+    setStore(data);
   };
 
   return (
-    <DataContext.Provider value={{ store, changeTitle, deleteCard, editCard,addCard }}>
+    <DataContext.Provider
+      value={{
+        store,
+        changeTitle,
+        // deleteCard,
+        editCard,
+        // addCard,
+        // addList,
+        updateDrag,
+        
+        cards,
+        cardDispatch,
+        listsKanban,
+        listDispatch,
+      }}
+    >
       {props.children}
     </DataContext.Provider>
   );

@@ -3,9 +3,17 @@ import TextareaAutosize from "react-textarea-autosize";
 import "../sass/Button.scss";
 import Cancel from "../assets/cancel.svg";
 import { DataContext } from "../context/store";
+import { addCardAct } from "../actions/cardAction";
+import { addListAct } from "../actions/listAction";
 
-const Button = ({id, list }) => {
-    const {addCard}=useContext(DataContext);
+const Button = ({ id, list }) => {
+  const {
+    // addCard,
+    // addList,
+    // cards,
+    cardDispatch,
+    listDispatch
+  } = useContext(DataContext);
 
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
@@ -17,12 +25,21 @@ const Button = ({id, list }) => {
     setText(e.target.value);
   };
 
-  const cardAdd=()=>{
-     if (text) {
-        addCard(id,text)
-     }
-      setText("")
-  }
+  const cardAdd = (id) => {
+    if (text) {
+      // addCard(id,text)
+      cardDispatch(addCardAct(id, text));
+    }
+    setText("");
+  };
+
+  const listAdd = () => {
+    if (text) {
+      //  addList(text)
+      listDispatch(addListAct(text));
+    }
+    setText("");
+  };
 
   const showForm = () => {
     const textButton = list ? "Add List" : "Add Card";
@@ -30,7 +47,7 @@ const Button = ({id, list }) => {
     return (
       <div className="form-box">
         <TextareaAutosize
-        required
+          required
           value={text}
           autoFocus
           placeholder={placeholder}
@@ -38,7 +55,12 @@ const Button = ({id, list }) => {
           onBlur={closeForm}
           onChange={handleChange}
         />
-        <button onMouseDown={cardAdd} className="add">{textButton}</button>
+        <button
+          onMouseDown={list ? () => listAdd() : () => cardAdd(id)}
+          className="add"
+        >
+          {textButton}
+        </button>
         <button className="close" onClick={closeForm}>
           <img src={Cancel} alt="cancel" />
         </button>
